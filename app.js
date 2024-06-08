@@ -1,4 +1,3 @@
-// Load environment variables from .env file
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 
 const express = require('express');
@@ -21,6 +20,11 @@ app.use(express.json());
 // Import routes
 const pokemonRoutes = require('./routes/pokemon');
 app.use('/api', pokemonRoutes);
+
+// Default route for root URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the Pokémon API! Use /api to access the API endpoints.');
+});
 
 // Start the server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
