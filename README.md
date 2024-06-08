@@ -45,6 +45,12 @@ PORT=3000
 MONGODB_URI=mongodb://localhost:27017/pokemonDBTest
 POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
 ```
+.env.production
+```bash
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/pokemonDB
+POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
+```
 4. Start the Application
 ```sh
 npm start
