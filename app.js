@@ -8,8 +8,8 @@ const pokemonRoutes = require('./routes/pokemon');
 console.log(`App running with MONGODB_URI: ${process.env.MONGODB_URI}`);
 
 async function connectToMongoDB() {
-    console.log('Connecting to MongoDB...');
     try {
+        console.log('Connecting to MongoDB...');
         await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
         console.log('Connected to MongoDB');
     } catch (err) {
