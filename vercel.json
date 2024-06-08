@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "app/api/**/*": {
+      "maxDuration": 60
+    }
+  },
     "version": 2,
     "builds": [
       {
@@ -16,5 +21,6 @@
         "dest": "/app.js"
       }
     ]
+    
   }
   
