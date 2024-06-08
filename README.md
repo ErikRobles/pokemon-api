@@ -24,11 +24,11 @@ This project is a Node.js application that interacts with the PokeAPI to fetch, 
 git clone https://github.com/ErikRobles/pokemon-api.git
 cd pokemon-api
 ```
-2. Install Dependencies
+### 2. Install Dependencies
 ```sh
 npm install
 ```
-3. Set Up Environment Variables
+### 3. Set Up Environment Variables
 
 Create .env.development and .env.test files in the root directory of your project.
 
@@ -51,7 +51,7 @@ PORT=3000
 MONGODB_URI=mongodb://localhost:27017/pokemonDB
 POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
 ```
-4. Start the Application
+### 4. Start the Application
 ```sh
 npm start
 ```

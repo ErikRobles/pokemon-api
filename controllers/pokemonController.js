@@ -1,103 +1,94 @@
 const axios = require('axios');
 const Pokemon = require('../models/pokemon');
+const NodeCache = require('node-cache');
 
-const fetchAndSavePokemon = async (req, res) => {
+const cache = new NodeCache({ stdTTL: 600 }); // Cache TTL (time to live) is 600 seconds (10 minutes)
+
+const fetchPokemon = async (req, res) => {
     const pokemonName = req.params.name.toLowerCase();
-    const pokeApiUrl = process.env.POKEAPI_URL;
+    const cacheKey = `pokemon_${pokemonName}`;
+
+    // Check if data is in cache
+    if (cache.has(cacheKey)) {
+        console.log('Returning cached data');
+        return res.status(200).json(cache.get(cacheKey));
+    }
 
     try {
-        const response = await axios.get(`${pokeApiUrl}${pokemonName}`);
+        const response = await axios.get(`${process.env.POKEAPI_URL}${pokemonName}`);
         const { id, name, moves, types } = response.data;
 
-        // Extract the first 4 moves
-        const pokemonMoves = moves.slice(0, 4).map(move => move.move.name);
-
-        // Extract types
-        const pokemonTypes = types.map(type => type.type.name);
-
-        // Create a new Pokémon instance
-        const newPokemon = new Pokemon({
+        const pokemon = {
             id,
             name,
-            moves: pokemonMoves,
-            types: pokemonTypes,
-        });
+            moves: moves.slice(0, 4).map(move => move.move.name),
+            types: types.map(type => type.type.name)
+        };
 
-        // Save to the database
+        // Save data to cache
+        cache.set(cacheKey, pokemon);
+
+        const newPokemon = new Pokemon(pokemon);
         await newPokemon.save();
 
-        res.status(201).send(newPokemon);
+        res.status(201).json(newPokemon);
     } catch (error) {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            res.status(error.response.status).send({ error: error.response.data });
-        } else if (error.request) {
-            // The request was made but no response was received
-            res.status(500).send({ error: 'No response received from PokeAPI' });
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            res.status(500).send({ error: error.message });
-        }
+        res.status(400).json({ error: error.message });
     }
 };
 
-const listPokemons = async (req, res) => {
+const getAllPokemon = async (req, res) => {
     try {
-        const pokemons = await Pokemon.find();
-        res.status(200).send(pokemons);
+        const pokemon = await Pokemon.find();
+        res.status(200).json(pokemon);
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
 
 const deletePokemonById = async (req, res) => {
-    const pokemonId = req.params.id;
-
     try {
-        const result = await Pokemon.deleteOne({ id: pokemonId });
+        const { id } = req.params;
+        const result = await Pokemon.deleteOne({ id });
         if (result.deletedCount === 0) {
-            return res.status(404).send({ message: 'Pokémon not found' });
+            return res.status(404).json({ message: 'Pokémon not found' });
         }
-        res.status(200).send({ message: 'Pokémon deleted successfully' });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
 
 const deletePokemonByName = async (req, res) => {
-    const pokemonName = req.params.name.toLowerCase();
-
     try {
-        const result = await Pokemon.deleteOne({ name: pokemonName });
+        const { name } = req.params;
+        const result = await Pokemon.deleteOne({ name: name.toLowerCase() });
         if (result.deletedCount === 0) {
-            return res.status(404).send({ message: 'Pokémon not found' });
+            return res.status(404).json({ message: 'Pokémon not found' });
         }
-        res.status(200).send({ message: 'Pokémon deleted successfully' });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
 
 const deletePokemonByType = async (req, res) => {
-    const pokemonType = req.params.type.toLowerCase();
-
     try {
-        // Find and delete Pokémon by type
-        const result = await Pokemon.deleteMany({ types: { $elemMatch: { $eq: pokemonType } } });
+        const { type } = req.params;
+        const result = await Pokemon.deleteMany({ types: type.toLowerCase() });
         if (result.deletedCount === 0) {
-            return res.status(404).send({ message: 'No Pokémon found with the specified type' });
+            return res.status(404).json({ message: 'No Pokémon found with the specified type' });
         }
-        res.status(200).send({ message: 'Pokémon deleted successfully' });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
 
 module.exports = {
-    fetchAndSavePokemon,
-    listPokemons,
+    fetchPokemon,
+    getAllPokemon,
     deletePokemonById,
     deletePokemonByName,
-    deletePokemonByType,
+    deletePokemonByType
 };

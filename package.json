@@ -15,7 +15,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
-    "mongoose": "^8.4.1"
+    "mongoose": "^8.4.1",
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "jest": "^29.7.0",
@@ -23,6 +24,8 @@
     "supertest": "^7.0.0"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/jest.setup.js"]
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ]
   }
 }

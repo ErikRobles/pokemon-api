@@ -1,57 +1,20 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator');
-const { fetchAndSavePokemon, listPokemons, deletePokemonById, deletePokemonByName, deletePokemonByType } = require('../controllers/pokemonController');
 const router = express.Router();
+const pokemonController = require('../controllers/pokemonController');
 
-// Route to fetch and save Pokémon data
-router.post('/pokemon/:name', 
-    [check('name').isString().withMessage('Name must be a string')], 
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    }, 
-    fetchAndSavePokemon);
+// Fetch and save a Pokémon
+router.post('/pokemon/:name', pokemonController.fetchPokemon);
 
-// Route to list all saved Pokémon
-router.get('/pokemons', listPokemons);
+// List all saved Pokémon
+router.get('/pokemons', pokemonController.getAllPokemon);
 
-// Route to delete a Pokémon by ID
-router.delete('/pokemon/id/:id', 
-    [check('id').isNumeric().withMessage('ID must be a number')], 
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    }, 
-    deletePokemonById);
+// Delete a Pokémon by ID
+router.delete('/pokemon/id/:id', pokemonController.deletePokemonById);
 
-// Route to delete a Pokémon by name
-router.delete('/pokemon/name/:name', 
-    [check('name').isString().withMessage('Name must be a string')], 
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    }, 
-    deletePokemonByName);
+// Delete a Pokémon by name
+router.delete('/pokemon/name/:name', pokemonController.deletePokemonByName);
 
-// Route to delete Pokémon by type
-router.delete('/pokemon/type/:type', 
-    [check('type').isString().withMessage('Type must be a string')], 
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    }, 
-    deletePokemonByType);
+// Delete Pokémon by type
+router.delete('/pokemon/type/:type', pokemonController.deletePokemonByType);
 
 module.exports = router;
