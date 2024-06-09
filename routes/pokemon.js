@@ -36,6 +36,20 @@ router.get('/pokemons', async (req, res) => {
     }
 });
 
+router.get('/pokemon/name/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        const pokemon = await Pokemon.findOne({ name: name });
+        if (!pokemon) {
+            return res.status(404).json({ message: 'Pokémon not found' });
+        }
+        res.status(200).json(pokemon);
+    } catch (error) {
+        console.error(`Error retrieving Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 router.delete('/pokemon/id/:id', async (req, res) => {
     const { id } = req.params;
     try {

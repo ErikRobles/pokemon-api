@@ -46,6 +46,19 @@ const getAllPokemon = async (req, res) => {
     }
 };
 
+const getPokemonByName = async (req, res) => {
+    try {
+        const { name } = req.params;
+        const pokemon = await Pokemon.findOne({ name: name.toLowerCase() });
+        if (!pokemon) {
+            return res.status(404).json({ message: 'Pokémon not found' });
+        }
+        res.status(200).json(pokemon);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const deletePokemonById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -88,6 +101,7 @@ const deletePokemonByType = async (req, res) => {
 module.exports = {
     fetchPokemon,
     getAllPokemon,
+    getPokemonByName,
     deletePokemonById,
     deletePokemonByName,
     deletePokemonByType
