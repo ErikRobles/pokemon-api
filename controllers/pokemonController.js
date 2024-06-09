@@ -2,104 +2,104 @@ const axios = require('axios');
 const Pokemon = require('../models/pokemon');
 const NodeCache = require('node-cache');
 
-const cache = new NodeCache({ stdTTL: 600 }); // Cache TTL (time to live) is 600 seconds (10 minutes)
+const cache = new NodeCache({ stdTTL: 600 }); // Cache TTL is 600 seconds (10 minutes)
 
-const fetchPokemon = async (req, res) => {
-    const pokemonName = req.params.name.toLowerCase();
-    const cacheKey = `pokemon_${pokemonName}`;
-
-    // Check if data is in cache
-    if (cache.has(cacheKey)) {
-        console.log('Returning cached data');
-        return res.status(200).json(cache.get(cacheKey));
-    }
-
+const fetchAndSavePokemon = async (req, res) => {
+    const { name } = req.params;
     try {
-        const response = await axios.get(`${process.env.POKEAPI_URL}${pokemonName}`);
-        const { id, name, moves, types } = response.data;
+        const cachedData = cache.get(name);
+        if (cachedData) {
+            return res.status(200).json(cachedData);
+        }
 
-        const pokemon = {
-            id,
-            name,
-            moves: moves.slice(0, 4).map(move => move.move.name),
-            types: types.map(type => type.type.name)
-        };
+        const response = await axios.get(`${process.env.POKEAPI_URL}/${name}`);
+        const pokemonData = response.data;
 
-        // Save data to cache
-        cache.set(cacheKey, pokemon);
+        const newPokemon = new Pokemon({
+            id: pokemonData.id,
+            name: pokemonData.name,
+            moves: pokemonData.moves.slice(0, 4).map(move => move.move.name),
+            types: pokemonData.types.map(type => type.type.name)
+        });
 
-        const newPokemon = new Pokemon(pokemon);
         await newPokemon.save();
+        cache.set(name, newPokemon);
 
         res.status(201).json(newPokemon);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error fetching or saving Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 const getAllPokemon = async (req, res) => {
     try {
-        const pokemon = await Pokemon.find();
-        res.status(200).json(pokemon);
+        const pokemons = await Pokemon.find();
+        res.status(200).json(pokemons);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error listing Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 const getPokemonByName = async (req, res) => {
+    const { name } = req.params;
     try {
-        const { name } = req.params;
         const pokemon = await Pokemon.findOne({ name: name.toLowerCase() });
         if (!pokemon) {
             return res.status(404).json({ message: 'Pokémon not found' });
         }
         res.status(200).json(pokemon);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error retrieving Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 const deletePokemonById = async (req, res) => {
+    const { id } = req.params;
     try {
-        const { id } = req.params;
-        const result = await Pokemon.deleteOne({ id });
+        const result = await Pokemon.deleteOne({ id: id });
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: 'Pokémon not found' });
         }
         res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 const deletePokemonByName = async (req, res) => {
+    const { name } = req.params;
     try {
-        const { name } = req.params;
         const result = await Pokemon.deleteOne({ name: name.toLowerCase() });
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: 'Pokémon not found' });
         }
         res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 const deletePokemonByType = async (req, res) => {
+    const { type } = req.params;
     try {
-        const { type } = req.params;
         const result = await Pokemon.deleteMany({ types: type.toLowerCase() });
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: 'No Pokémon found with the specified type' });
         }
         res.status(200).json({ message: 'Pokémon deleted successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 module.exports = {
-    fetchPokemon,
+    fetchAndSavePokemon,
     getAllPokemon,
     getPokemonByName,
     deletePokemonById,

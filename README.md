@@ -4,6 +4,9 @@
 
 This project is a Node.js application that interacts with the PokeAPI to fetch, store, and manage Pokémon data in a MongoDB database. The application provides RESTful API endpoints to perform CRUD operations on Pokémon data.
 
+ ### Live API Base URL
+   The live API is hosted at: `https://pokedex-rt82.onrender.com`
+
 ## Features
 
 - Fetch and save Pokémon data from PokeAPI.
@@ -55,7 +58,7 @@ POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
 ```sh
 npm start
 ```
-The server will be running on http://localhost:3000.
+The server will be created dynamically.
 
 ### Running Tests
 1. Run Tests
@@ -80,7 +83,7 @@ Fetch and Save Pokémon
 __Example Request:__
 
 ```sh
-POST http://localhost:3000/api/pokemon/pikachu
+POST https://pokedex-rt82.onrender.com/api/pokemon/pikachu
 ```
 Example Response:
 
@@ -102,7 +105,7 @@ Example Response:
 **Example Request:**
 
 ```sh
-GET http://localhost:3000/api/pokemons
+GET https://pokedex-rt82.onrender.com/api/pokemons
 ```
 Example Response:
 
@@ -134,7 +137,7 @@ Example Response:
 **Example Request:**
 
 ```sh
-DELETE http://localhost:3000/api/pokemon/id/25
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/id/25
 ```
 Example Response:
 
@@ -155,7 +158,7 @@ Example Response:
 **Example Request:**
 
 ```sh
-DELETE http://localhost:3000/api/pokemon/name/pikachu
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/name/pikachu
 ```
 Example Response:
 
@@ -175,7 +178,7 @@ Example Response:
 **Example Request:**
 
 ```sh
-DELETE http://localhost:3000/api/pokemon/type/bug
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/type/bug
 ```
 Example Response:
 

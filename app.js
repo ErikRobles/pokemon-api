@@ -1,10 +1,9 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const pokemonRoutes = require('./routes/pokemon');
-
-
 
 console.log(`App running with MONGODB_URI: ${process.env.MONGODB_URI}`);
 
@@ -21,7 +20,6 @@ async function connectToMongoDB() {
 connectToMongoDB();
 
 app.use(express.json());
-
 app.use('/api', pokemonRoutes);
 
 app.get('/', (req, res) => {
@@ -31,12 +29,5 @@ app.get('/', (req, res) => {
 app.get('*', (req, res) => {
     res.status(404).send('404 Not Found: This route does not exist.');
 });
-
-if (process.env.NODE_ENV !== 'test') {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
 
 module.exports = app;
