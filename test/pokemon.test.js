@@ -15,7 +15,9 @@ beforeAll(async () => {
 afterAll(async () => {
     await mongoose.connection.close();
     await mongoose.disconnect();
-    server.close(); // Close the server after tests
+    if (server) {
+        server.close(); // Close the server after tests
+    }
 });
 
 describe('Pokemon API', () => {
@@ -29,6 +31,13 @@ describe('Pokemon API', () => {
         const response = await request(server).get('/api/pokemons');
         expect(response.statusCode).toBe(200);
         expect(response.body.length).toBeGreaterThan(0);
+    });
+
+    it('should fetch a Pokémon by name', async () => {
+        await request(server).post('/api/pokemon/charmander');
+        const response = await request(server).get('/api/pokemon/name/charmander');
+        expect(response.statusCode).toBe(200);
+        expect(response.body.name).toBe('charmander');
     });
 
     it('should delete a Pokémon by ID', async () => {
