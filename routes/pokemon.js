@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { fetchAndSavePokemon, getAllPokemon, getPokemonByName, deletePokemonById, deletePokemonByName, deletePokemonByType } = require('../controllers/pokemonController');
+const {
+    fetchAndSavePokemon,
+    getAllPokemon,
+    getPokemonByName,
+    deletePokemonById,
+    deletePokemonByName,
+    deletePokemonByType
+} = require('../controllers/pokemonController');
 
 router.post('/pokemon/:name', async (req, res) => {
     const { name } = req.params;
@@ -12,10 +19,10 @@ router.post('/pokemon/:name', async (req, res) => {
     }
 });
 
-router.get('/pokemon', getAllPokemon);
+router.get('/pokemons', getAllPokemon); // This route should match the URL you are trying to access
 router.get('/pokemon/:name', getPokemonByName);
 router.delete('/pokemon/id/:id', deletePokemonById);
-router.delete('/pokemon/:name', deletePokemonByName);
+router.delete('/pokemon/name/:name', deletePokemonByName);
 router.delete('/pokemon/type/:type', deletePokemonByType);
 
 module.exports = router;
