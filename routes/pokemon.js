@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const {
-    fetchAndSavePokemon,
-    getAllPokemon,
-    getPokemonByName,
-    deletePokemonById,
-    deletePokemonByName,
-    deletePokemonByType
-} = require('../controllers/pokemonController');
+const { fetchAndSavePokemon, getAllPokemon, getPokemonByName, deletePokemonById, deletePokemonByName, deletePokemonByType } = require('../controllers/pokemonController');
 
-// Routes
-router.post('/pokemon/:name', fetchAndSavePokemon);
-router.get('/pokemons', getAllPokemon);
-router.get('/pokemon/name/:name', getPokemonByName);
+router.post('/pokemon/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        const pokemon = await fetchAndSavePokemon(name);
+        res.status(201).json(pokemon);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/pokemon', getAllPokemon);
+router.get('/pokemon/:name', getPokemonByName);
 router.delete('/pokemon/id/:id', deletePokemonById);
-router.delete('/pokemon/name/:name', deletePokemonByName);
+router.delete('/pokemon/:name', deletePokemonByName);
 router.delete('/pokemon/type/:type', deletePokemonByType);
 
 module.exports = router;

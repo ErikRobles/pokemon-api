@@ -9,7 +9,6 @@ const pokemonRoutes = require('./routes/pokemon');
 
 app.use(cors()); // Enable CORS
 
-
 console.log(`App running with MONGODB_URI: ${process.env.MONGODB_URI}`);
 
 async function connectToMongoDB() {
@@ -25,7 +24,7 @@ async function connectToMongoDB() {
 connectToMongoDB();
 
 app.use(express.json());
-app.use('/api', pokemonRoutes);
+app.use('/api', pokemonRoutes); // Ensure this line is present and correct
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Pokémon API! Use /api to access the API endpoints.');
