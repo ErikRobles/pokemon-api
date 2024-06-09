@@ -1,4 +1,5 @@
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
+const path = require('path');
+require('dotenv').config({ path: process.env.ENV_PATH || path.resolve(__dirname, '.env') });
 
 const express = require('express');
 const mongoose = require('mongoose');
