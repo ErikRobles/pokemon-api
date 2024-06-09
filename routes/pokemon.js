@@ -8,12 +8,9 @@ router.post('/pokemon/:name', async (req, res) => {
     console.log(`Fetching Pokémon: ${name}`);
 
     try {
-        const start = Date.now();
         const response = await axios.get(`${process.env.POKEAPI_URL}/${name}`);
-        const fetchTime = Date.now() - start;
-        console.log(`Fetched Pokémon data in ${fetchTime}ms`);
-
         const pokemonData = response.data;
+
         const newPokemon = new Pokemon({
             id: pokemonData.id,
             name: pokemonData.name,
@@ -21,11 +18,7 @@ router.post('/pokemon/:name', async (req, res) => {
             types: pokemonData.types.map(type => type.type.name)
         });
 
-        const saveStart = Date.now();
         await newPokemon.save();
-        const saveTime = Date.now() - saveStart;
-        console.log(`Saved Pokémon data in ${saveTime}ms`);
-
         res.status(201).json(newPokemon);
     } catch (error) {
         console.error(`Error fetching or saving Pokémon: ${error.message}`);
@@ -34,8 +27,6 @@ router.post('/pokemon/:name', async (req, res) => {
 });
 
 router.get('/pokemons', async (req, res) => {
-    console.log('Listing all Pokémon');
-
     try {
         const pokemons = await Pokemon.find();
         res.status(200).json(pokemons);
@@ -47,8 +38,6 @@ router.get('/pokemons', async (req, res) => {
 
 router.delete('/pokemon/id/:id', async (req, res) => {
     const { id } = req.params;
-    console.log(`Deleting Pokémon with ID: ${id}`);
-
     try {
         await Pokemon.deleteOne({ id: id });
         res.status(200).json({ message: 'Pokémon deleted successfully' });
@@ -60,8 +49,6 @@ router.delete('/pokemon/id/:id', async (req, res) => {
 
 router.delete('/pokemon/name/:name', async (req, res) => {
     const { name } = req.params;
-    console.log(`Deleting Pokémon with name: ${name}`);
-
     try {
         await Pokemon.deleteOne({ name: name });
         res.status(200).json({ message: 'Pokémon deleted successfully' });
@@ -73,8 +60,6 @@ router.delete('/pokemon/name/:name', async (req, res) => {
 
 router.delete('/pokemon/type/:type', async (req, res) => {
     const { type } = req.params;
-    console.log(`Deleting Pokémon with type: ${type}`);
-
     try {
         await Pokemon.deleteMany({ types: type });
         res.status(200).json({ message: 'Pokémon deleted successfully' });
