@@ -12,16 +12,17 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemon/pikachu",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.com/api/pokemon/metapod",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"pokemon",
-						"pikachu"
+						"metapod"
 					]
 				}
 			},
@@ -33,14 +34,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemons",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.comapi/pokemons",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"comapi"
 					],
-					"port": "3000",
 					"path": [
-						"api",
 						"pokemons"
 					]
 				}
@@ -53,17 +54,18 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemon/id/25",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.com/api/pokemon/id/7",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"pokemon",
 						"id",
-						"25"
+						"7"
 					]
 				}
 			},
@@ -75,17 +77,15 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemon/name/pikachu",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.com/jigglypuff",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
-						"api",
-						"pokemon",
-						"name",
-						"pikachu"
+						"jigglypuff"
 					]
 				}
 			},
@@ -97,12 +97,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemon/pikachu",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.com/api/pokemon/pikachu",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"pokemon",
@@ -118,17 +119,18 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/pokemon/type/bug",
-					"protocol": "http",
+					"raw": "https://pokedex-rt82.onrender.com/api/pokemon/type/poison",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"pokedex-rt82",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"pokemon",
 						"type",
-						"bug"
+						"poison"
 					]
 				}
 			},
