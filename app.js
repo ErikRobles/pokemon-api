@@ -2,8 +2,12 @@ require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}`
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const app = express();
 const pokemonRoutes = require('./routes/pokemon');
+
+app.use(cors()); // Enable CORS
+
 
 console.log(`App running with MONGODB_URI: ${process.env.MONGODB_URI}`);
 
