@@ -1,4 +1,553 @@
-# Pokemon API
+# API de Pokémon (Documentación en Español)
+## Resumen
+Este proyecto es una aplicación de Node.js que interactúa con la PokeAPI para obtener, almacenar y gestionar datos de Pokémon en una base de datos MongoDB. La aplicación proporciona endpoints de API RESTful para realizar operaciones CRUD en los datos de Pokémon.
+
+#### URL Base de la API en Vivo
+La API en vivo está alojada en: https://pokedex-rt82.onrender.com
+
+#### Características
+* Obtener y guardar datos de Pokémon desde PokeAPI.
+* Listar todos los Pokémon guardados.
+* Eliminar Pokémon por ID o nombre.
+* Eliminar Pokémon por tipo.
+
+#### Características Adicionales
+**Express Validator:**
+
+Express-validator está integrado en la aplicación para asegurar que las solicitudes entrantes sean validadas y saneadas adecuadamente. Esto ayuda a prevenir vulnerabilidades comunes de seguridad, como la inyección de SQL y ataques XSS, asegurando que los datos procesados sean limpios y conformes a los formatos esperados.
+
+**Limitación de Tasa (Rate Limiting):**
+
+La limitación de tasa está implementada para proteger la aplicación del abuso y el uso excesivo. Limita el número de solicitudes que un cliente puede realizar en un cierto período, ayudando a prevenir ataques de denegación de servicio (DoS) y asegurando el uso justo de los recursos de la API.
+
+#### Prerrequisitos
+* Node.js
+* MongoDB
+#### Empezando
+1. Clona el Repositorio
+```sh
+git clone https://github.com/ErikRobles/pokemon-api.git
+cd pokemon-api
+```
+2. Instala las Dependencias
+```sh
+npm install
+```
+3. Configura las Variables de Entorno
+
+Crea archivos .env.development, .env.test, .env.production  en el directorio raíz de tu proyecto.
+
+.env.development
+
+```bash
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/pokemonDB
+POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
+```
+.env.test
+
+```bash
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/pokemonDBTest
+POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
+```
+.env.production
+
+```bash
+PORT=3000
+MONGODB_URI=MONGODB_URI=mongodb+srv://<your_mongodb_username>:<your_mongodb_password>@reactcluster.mwilcq5.mongodb.net/?retryWrites=true&w=majority&appName=ReactCluster
+
+POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
+```
+4. Inicia la Aplicación
+```sh
+npm start
+or
+npm run start:dev
+```
+En el desarrollo local, el servidor será puerta 3000
+
+#### Ejecutando Pruebas
+1. Ejecutar Pruebas
+
+Para ejecutar las pruebas, usa el siguiente comando:
+```sh
+npm test
+```
+Esto ejecutará el conjunto de pruebas usando Jest.
+
+### Documentación de la API
+#### Colección de Postman
+**Importando la Colección de Postman**
+
+1. Descarga el Archivo de la Colección de Postman:
+* Asegúrate de que el archivo Pokedex API.postman_collection.json esté presente en el directorio raíz del proyecto.
+2. Abre Postman:
+* Lanza la aplicación Postman.
+3. Importa la Colección:
+* Haz clic en el botón Importar en la esquina superior izquierda de la interfaz de Postman.
+* Selecciona la pestaña Elegir Archivos.
+* Navega al directorio del proyecto y selecciona el archivo Pokedex API.postman_collection.json.
+* Haz clic en Abrir para importar la colección.
+4. Usa los Endpoints:
+* Una vez importada la colección, verás una lista de todos los endpoints en la colección.
+* Ahora puedes enviar solicitudes a los endpoints de la API usando Postman.
+
+**Obtener y Guardar Pokémon**
+
+**Endpoint:** POST /api/pokemon/:name
+
+**Descripción:** Obtiene los datos de un Pokémon dado por su nombre desde la PokeAPI y los guarda en la base de datos MongoDB.
+
+**Parámetros:**
+
+* name: El nombre del Pokémon.
+Ejemplo de Solicitud:
+
+```sh
+POST https://pokedex-rt82.onrender.com/api/pokemon/pikachu
+```
+Ejemplo de Respuesta:
+
+```json
+{
+  "id": 25,
+  "name": "pikachu",
+  "moves": ["mega-punch", "pay-day", "thunder-punch", "slam"],
+  "types": ["electric"]
+}
+```
+Listar Todos los Pokémon Guardados
+
+**Endpoint:** GET /api/pokemons
+
+**Descripción:** Lista todas las entradas de Pokémon guardadas en la base de datos MongoDB.
+
+Ejemplo de Solicitud:
+
+```sh
+GET https://pokedex-rt82.onrender.com/api/pokemons
+```
+Ejemplo de Respuesta:
+
+```json
+[
+  {
+    "id": 25,
+    "name": "pikachu",
+    "moves": ["mega-punch", "pay-day", "thunder-punch", "slam"],
+    "types": ["electric"]
+  },
+  {
+    "id": 1,
+    "name": "bulbasaur",
+    "moves": ["razor-wind", "swords-dance", "cut", "bind"],
+    "types": ["grass", "poison"]
+  }
+]
+```
+### Eliminar Pokémon por ID
+**Endpoint:** DELETE /api/pokemon/id/
+
+**Descripción:** Elimina una entrada de Pokémon de la base de datos MongoDB por su ID.
+
+**Parámetros:**
+
+* id: El ID del Pokémon.
+
+**Ejemplo de Solicitud:**
+
+```sh
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/id/25
+```
+Ejemplo de Respuesta:
+
+```json
+{
+  "message": "Pokémon eliminado exitosamente"
+}
+```
+#### Eliminar Pokémon por Nombre
+**Endpoint:** DELETE /api/pokemon/name/
+
+**Descripción:** Elimina una entrada de Pokémon de la base de datos MongoDB por su nombre.
+
+**Parámetros:**
+
+* name: El nombre del Pokémon.
+Ejemplo de Solicitud:
+
+```sh
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/name/pikachu
+```
+Ejemplo de Respuesta:
+
+```json
+{
+  "message": "Pokémon eliminado exitosamente"
+}
+```
+#### Eliminar Pokémon por Tipo
+**Endpoint:** DELETE /api/pokemon/type/
+
+**Descripción:** Elimina todas las entradas de Pokémon de la base de datos MongoDB que tienen un tipo especificado.
+
+**Parámetros:**
+
+* type: El tipo del Pokémon.
+**Ejemplo de Solicitud:**
+```sh
+DELETE https://pokedex-rt82.onrender.com/api/pokemon/type/bug
+```
+Ejemplo de Respuesta:
+
+```json
+{
+  "message": "Pokémon eliminado exitosamente"
+}
+```
+## Configuración de Docker
+#### Prerrequisitos
+* Docker instalado en tu máquina local
+1. Crea un Archivo .env.docker
+
+Crea un archivo llamado .env.docker en el directorio raíz de tu proyecto con el siguiente contenido:
+
+```env
+PORT=3000
+MONGODB_URI=<tu_mongodb_uri>
+POKEAPI_URL=https://pokeapi.co/api/v2/pokemon/
+```
+Reemplaza '<tu_mongodb_uri>' con tu URI real de MongoDB
+
+2. Construye la Imagen de Docker
+
+Ejecuta el siguiente comando en el directorio raíz de tu proyecto para construir la imagen de Docker:
+
+```sh
+sudo docker build -t pokemon-api .
+```
+3. Ejecuta el Contenedor de Docker
+
+Ejecuta el siguiente comando para iniciar un contenedor desde la imagen, mapeándolo a un puerto disponible (por ejemplo, 3001 si el 3000 está en uso):
+
+```sh
+sudo docker run -p 3001:3000 -d pokemon-api
+```
+4. Verifica el Contenedor de Docker
+
+* Lista los Contenedores en Ejecución:
+```sh
+sudo docker ps
+```
+* Accede a la Aplicación:
+Abre tu navegador y ve a http://localhost:3001 para verificar que la aplicación esté en funcionamiento.
+
+* Verifica los Logs (si es necesario):
+Si necesitas verificar los logs por algún problema, usa:
+
+```sh
+sudo docker logs <container_id>
+```
+* Detén el Contenedor:
+
+Si necesitas detener el contenedor, usa:
+```sh
+sudo docker stop <container_id>
+```
+**Notas**
+
+* Si encuentras problemas de permisos al ejecutar comandos de Docker, prefija los comandos con sudo.
+* Asegúrate de que la URI de MongoDB en .env.docker esté correctamente configurada y sea accesible desde el contenedor de Docker.
+### Ejecutando las Pruebas
+Esta sección proporciona instrucciones sobre cómo ejecutar tanto la prueba secuencial como la prueba de carga para la API de Pokémon.
+
+#### Prueba Secuencial
+El script de prueba secuencial prueba la funcionalidad básica de crear, recuperar, listar y eliminar un Pokémon secuencialmente. Este script asegura que la funcionalidad principal funcione según lo esperado sin condiciones de carrera.
+
+**Prerrequisitos**
+
+* Asegúrate de que el servidor de la API de Pokémon esté ejecutándose localmente en el puerto 3000.
+* Node.js debe estar instalado en tu máquina.
+
+**Pasos**
+
+1. Navega al directorio del proyecto:
+```bash
+cd /path/to/your/project
+```
+
+2. Ejecuta la prueba secuencial:
+```bash
+node test/sequentialTest.js
+```
+**Salida Esperada:**
+
+El script generará logs para cada iteración, indicando el éxito o fallo de crear, recuperar, listar y eliminar Pokémon. Ejemplo de salida:
+
+```text
+Iteration: 1
+Successfully created Pokémon: pikachu
+Successfully retrieved Pokémon by name: pikachu
+Successfully listed all Pokémon: 15 found
+Successfully deleted Pokémon by name: Pokémon deleted successfully
+...
+Sequential test completed.
+```
+#### Prueba de Carga
+El script de prueba de carga prueba el rendimiento y la estabilidad de la API de Pokémon bajo carga. Este script simula múltiples usuarios realizando varias operaciones en la API.
+
+**Prerrequisitos**
+
+* Asegúrate de que el servidor de la API de Pokémon esté ejecutándose localmente en el puerto 3000.
+
+* Artillery debe estar instalado globalmente. Si no, instálalo usando el siguiente comando:
+
+```bash
+npm install -g artillery
+```
+**Pasos**
+
+1. Navega al directorio del proyecto:
+```bash
+cd /path/to/your/project
+```
+2. Ejecuta la prueba de carga:
+
+Asegúrate de tener la siguiente configuración en tu package.json:
+
+```json
+{
+  "scripts": {
+    "load-test": "artillery run test/load-test.yml"
+  }
+}
+```
+Crea un archivo llamado load-test.yml con el siguiente contenido:
+
+```yaml
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5  # Tasa moderada para mejor trazabilidad
+  plugins:
+    expect: {}
+
+scenarios:
+  - flow:
+      - post:
+          url: "/api/pokemon/pikachu"
+          expect:
+            - statusCode: 201
+      - think: 5s
+      - get:
+          url: "/api/pokemon/pikachu"
+          expect:
+            - statusCode: 200
+      - think: 5s
+      - get:
+          url: "/api/pokemon"
+          expect:
+            - statusCode: 200
+      - think: 5s
+      - delete:
+          url: "/api/pokemon/pikachu"
+          expect:
+            - statusCode: 200
+      - think: 5s
+      - get:
+          url: "/api/pokemon"
+          expect:
+            - statusCode: 200
+```
+3. Ejecuta la prueba de carga usando npm:
+```bash
+npm run load-test
+```
+**Salida Esperada:**
+
+Artillery generará un informe de resumen al final de la prueba, mostrando el número de solicitudes, tiempos de respuesta y cualquier expectativa fallida. Ejemplo de salida:
+
+```text
+All VUs finished. Total time: 1 minute, 22 seconds
+
+--------------------------------
+Summary report @ 15:49:38(-0600)
+--------------------------------
+
+http.codes.200: ....................................................... 818
+http.codes.201: ....................................................... 300
+http.codes.404: ....................................................... 382
+http.codes.500: ....................................................... 300
+http.requests: ........................................................ 1500
+http.response_time:
+  min: ................................................................ 0
+  max: ................................................................ 372
+  mean: ............................................................... 17
+  median: ............................................................. 4
+  p95: ................................................................ 111.1
+  p99: ................................................................ 172.5
+  ```
+**Notas**
+
+* Asegúrate de que tu servidor de la API de Pokémon tenga suficientes recursos para manejar la carga generada por las pruebas.
+* Modifica la tasa de llegada y la duración en el archivo load-test.yml según sea necesario para simular diferentes escenarios de carga.
+#### Estructura del Proyecto
+```arduino
+Copy code
+pokemon-api/
+├── node_modules/
+├── routes/
+│   └── pokemon.js
+├── controllers/
+│   └── pokemonController.js
+├── models/
+│   └── pokemon.js
+├── .env.development
+├── .env.test
+├── .env.docker
+├── app.js
+├── Dockerfile
+├── package.json
+├── jest.setup.js
+├── README.md
+├── Pokedex API.postman_collection.json
+├── test/
+│   ├── pokemon.test.js
+│   ├── sequentialTest.js
+│   └── load-test.yml
+```
+#### Licencia
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+#### Agradecimientos
+* PokeAPI
+* Express
+* Mongoose
+* Jest
+* Supertest
+
+## Refactorización
+Durante el desarrollo, me di cuenta de que mi archivo de rutas era una repetición cercana a mi archivo de controladores, así que, siguiendo la metodología DRY, simplifiqué el archivo de rutas. A continuación se presentan las versiones antes y después de la refactorización.
+
+**Antes de la Refactorización**
+```js
+const express = require('express');
+const router = express.Router();
+const axios = require('axios');
+const Pokemon = require('../models/pokemon');
+
+router.post('/pokemon/:name', async (req, res) => {
+    const { name } = req.params;
+    console.log(`Fetching Pokémon: ${name}`);
+
+    try {
+        const response = await axios.get(`${process.env.POKEAPI_URL}/${name}`);
+        const pokemonData = response.data;
+
+        const newPokemon = new Pokemon({
+            id: pokemonData.id,
+            name: pokemonData.name,
+            moves: pokemonData.moves.slice(0, 4).map(move => move.move.name),
+            types: pokemonData.types.map(type => type.type.name)
+        });
+
+        await newPokemon.save();
+        res.status(201).json(newPokemon);
+    } catch (error) {
+        console.error(`Error fetching or saving Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get('/pokemons', async (req, res) => {
+    try {
+        const pokemons = await Pokemon.find();
+        res.status(200).json(pokemons);
+    } catch (error) {
+        console.error(`Error listing Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/id/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await Pokemon.deleteOne({ id: id });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/name/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        await Pokemon.deleteOne({ name: name });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/type/:type', async (req, res) => {
+    const { type } = req.params;
+    try {
+        await Pokemon.deleteMany({ types: type });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+module.exports = router;
+```
+**Despues de la Refactorización**
+```js
+const express = require('express');
+const router = express.Router();
+const { check, validationResult } = require('express-validator')
+const {
+    fetchAndSavePokemon,
+    getAllPokemon,
+    getPokemonByName,
+    deletePokemonById,
+    deletePokemonByName,
+    deletePokemonByType
+} = require('../controllers/pokemonController');
+
+router.post('/pokemon/:name', [
+    check('name').isString().trim().escape()
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name } = req.params;
+    try {
+        const pokemon = await fetchAndSavePokemon(name);
+        res.status(201).json(pokemon);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/pokemons', getAllPokemon); // This route should match the URL you are trying to access
+router.get('/pokemon/:name', getPokemonByName);
+router.delete('/pokemon/id/:id', deletePokemonById);
+router.delete('/pokemon/name/:name', deletePokemonByName);
+router.delete('/pokemon/type/:type', deletePokemonByType);
+
+module.exports = router;
+
+```
+
+# Pokemon API (English Documentation)
 
 ## Overview
 
