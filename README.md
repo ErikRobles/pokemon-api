@@ -14,6 +14,12 @@ This project is a Node.js application that interacts with the PokeAPI to fetch, 
 - Delete Pokémon by ID or name.
 - Delete Pokémon by type.
 
+## Additional Features
+### Express Validator:
+Express-validator is integrated into the application to ensure that incoming requests are properly validated and sanitized. This helps prevent common security vulnerabilities such as SQL injection and XSS attacks by ensuring that the data being processed is clean and conforms to expected formats.
+### Rate Limiting:
+Rate limiting is implemented to protect the application from abuse and excessive use. It limits the number of requests a client can make in a certain period, helping to prevent denial-of-service (DoS) attacks and ensuring fair usage of the API resources.
+
 ## Prerequisites
 
 - Node.js
@@ -432,4 +438,114 @@ This project is licensed under the MIT License. See the LICENSE file for details
 * Express
 * Mongoose
 * Jest
-* Supertest
+* Supertest 
+
+## Refactorization
+Throughout development I realized that my routes file was a close repeat to my Controllers file so I, in keeping with DRY methodology, simplified the routes file. Following are the before and after of that refactorization.
+
+**Before Refactorization**
+```js
+const express = require('express');
+const router = express.Router();
+const axios = require('axios');
+const Pokemon = require('../models/pokemon');
+
+router.post('/pokemon/:name', async (req, res) => {
+    const { name } = req.params;
+    console.log(`Fetching Pokémon: ${name}`);
+
+    try {
+        const response = await axios.get(`${process.env.POKEAPI_URL}/${name}`);
+        const pokemonData = response.data;
+
+        const newPokemon = new Pokemon({
+            id: pokemonData.id,
+            name: pokemonData.name,
+            moves: pokemonData.moves.slice(0, 4).map(move => move.move.name),
+            types: pokemonData.types.map(type => type.type.name)
+        });
+
+        await newPokemon.save();
+        res.status(201).json(newPokemon);
+    } catch (error) {
+        console.error(`Error fetching or saving Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get('/pokemons', async (req, res) => {
+    try {
+        const pokemons = await Pokemon.find();
+        res.status(200).json(pokemons);
+    } catch (error) {
+        console.error(`Error listing Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/id/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await Pokemon.deleteOne({ id: id });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/name/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        await Pokemon.deleteOne({ name: name });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/pokemon/type/:type', async (req, res) => {
+    const { type } = req.params;
+    try {
+        await Pokemon.deleteMany({ types: type });
+        res.status(200).json({ message: 'Pokémon deleted successfully' });
+    } catch (error) {
+        console.error(`Error deleting Pokémon: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+module.exports = router;
+```
+**After Refactorization**
+```js
+const express = require('express');
+const router = express.Router();
+const {
+    fetchAndSavePokemon,
+    getAllPokemon,
+    getPokemonByName,
+    deletePokemonById,
+    deletePokemonByName,
+    deletePokemonByType
+} = require('../controllers/pokemonController');
+
+router.post('/pokemon/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        const pokemon = await fetchAndSavePokemon(name);
+        res.status(201).json(pokemon);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/pokemons', getAllPokemon); 
+router.get('/pokemon/:name', getPokemonByName);
+router.delete('/pokemon/id/:id', deletePokemonById);
+router.delete('/pokemon/name/:name', deletePokemonByName);
+router.delete('/pokemon/type/:type', deletePokemonByType);
+
+module.exports = router;
+```

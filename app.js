@@ -6,8 +6,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 const pokemonRoutes = require('./routes/pokemon');
+const rateLimit = require('express-rate-limit');
 
-app.use(cors()); // Enable CORS
+// API Route Security
+// Rate limiter middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.'
+});
+
+// Apply rate limiting to all requests
+app.use(limiter);
+
+// Enable CORS
+app.use(cors()); 
 
 console.log(`App running with MONGODB_URI: ${process.env.MONGODB_URI}`);
 
@@ -24,7 +37,7 @@ async function connectToMongoDB() {
 connectToMongoDB();
 
 app.use(express.json());
-app.use('/api', pokemonRoutes); // Ensure this line is present and correct
+app.use('/api', pokemonRoutes); 
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Pokémon API! Use /api to access the API endpoints.');
