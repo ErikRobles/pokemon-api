@@ -1,0 +1,16 @@
+2024-06-13T19:22:29.864Z info: App running with MONGODB_URI: mongodb://localhost:27017/pokemonDB
+2024-06-13T19:22:29.867Z info: Connecting to MongoDB...
+2024-06-13T19:22:29.906Z info: Server is running on port 3000
+2024-06-13T19:22:29.937Z info: Connected to MongoDB
+2024-06-13T19:22:50.263Z info: Retrieving all Pokémon
+2024-06-13T19:22:50.348Z info: Successfully retrieved all Pokémon
+2024-06-13T19:23:08.046Z info: Deleting Pokémon by ID: 8
+2024-06-13T19:23:08.112Z info: Successfully deleted Pokémon with ID: 8
+2024-06-13T19:23:25.069Z info: Fetching and saving Pokémon: wartortle
+2024-06-13T19:23:25.070Z info: Making request to PokeAPI for Pokémon: wartortle
+2024-06-13T19:23:25.532Z info: Saving Pokémon to database: wartortle
+2024-06-13T19:23:25.551Z info: Successfully fetched and saved Pokémon with name: wartortle
+2024-06-13T19:23:37.932Z info: Deleting Pokémon by type: water
+2024-06-13T19:23:37.935Z info: Successfully deleted Pokémon with type: water
+2024-06-13T19:23:43.724Z info: Retrieving all Pokémon
+2024-06-13T19:23:43.732Z info: Successfully retrieved all Pokémon

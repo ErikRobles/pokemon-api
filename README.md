@@ -20,6 +20,23 @@ Express-validator está integrado en la aplicación para asegurar que las solici
 
 La limitación de tasa está implementada para proteger la aplicación del abuso y el uso excesivo. Limita el número de solicitudes que un cliente puede realizar en un cierto período, ayudando a prevenir ataques de denegación de servicio (DoS) y asegurando el uso justo de los recursos de la API.
 
+## Patrón de Diseño
+
+En este proyecto, hemos implementado el patrón de diseño de Capa de Servicio para mejorar la separación de responsabilidades y aumentar la mantenibilidad del código. El patrón de diseño de Capa de Servicio ayuda a organizar la lógica de negocio en una capa dedicada, que interactúa con los controladores. Este enfoque ofrece varios beneficios:
+
+1. **Separación de Responsabilidades**: Al mover la lógica de negocio a la capa de servicio, nos aseguramos de que los controladores sean responsables únicamente de manejar las solicitudes y respuestas HTTP. Esta separación hace que el código sea más fácil de gestionar y entender.
+
+2. **Reusabilidad**: La capa de servicio encapsula la lógica de negocio, haciéndola reutilizable en diferentes partes de la aplicación. Esto evita la duplicación de código y promueve los principios DRY (Don't Repeat Yourself, No Te Repitas).
+
+3. **Testabilidad**: Aislar la lógica de negocio en la capa de servicio simplifica las pruebas unitarias. Podemos probar la lógica de negocio de forma independiente a los controladores, lo que lleva a pruebas más robustas y fiables.
+
+4. **Mantenibilidad**: Con la clara separación de responsabilidades, se vuelve más fácil mantener y extender la aplicación. Cualquier cambio en la lógica de negocio se puede hacer en la capa de servicio sin afectar a los controladores.
+
+### Implementación de Logger
+
+Para mejorar las capacidades de registro y evitar el uso excesivo de `console.log`, hemos integrado la biblioteca de logger `winston`. La biblioteca `winston` proporciona un sistema de registro flexible y extensible, que nos permite registrar mensajes con diferentes niveles de severidad y enviarlos a varios transportes, como la consola y archivos. Esto ayuda a mejorar la monitorización y depuración de la aplicación.
+
+
 #### Prerrequisitos
 * Node.js
 * MongoDB
@@ -568,6 +585,22 @@ This project is a Node.js application that interacts with the PokeAPI to fetch, 
 Express-validator is integrated into the application to ensure that incoming requests are properly validated and sanitized. This helps prevent common security vulnerabilities such as SQL injection and XSS attacks by ensuring that the data being processed is clean and conforms to expected formats.
 ### Rate Limiting:
 Rate limiting is implemented to protect the application from abuse and excessive use. It limits the number of requests a client can make in a certain period, helping to prevent denial-of-service (DoS) attacks and ensuring fair usage of the API resources.
+
+## Design Pattern 
+In this project, we have implemented the Service Layer design pattern to improve the separation of concerns and enhance the maintainability of the codebase. The Service Layer design pattern helps in organizing the business logic in a dedicated layer, which interacts with the controllers. This approach offers several benefits:
+
+1. **Separation of Concerns**: By moving the business logic to the service layer, we ensure that controllers are only responsible for handling HTTP requests and responses. This separation makes the code easier to manage and understand.
+
+2. **Reusability**: The service layer encapsulates the business logic, making it reusable across different parts of the application. This avoids code duplication and promotes DRY (Don't Repeat Yourself) principles.
+
+3. **Testability**: Isolating the business logic in the service layer simplifies unit testing. We can test the business logic independently from the controllers, leading to more robust and reliable tests.
+
+4. **Maintainability**: With the clear separation of responsibilities, it becomes easier to maintain and extend the application. Any changes to the business logic can be made in the service layer without affecting the controllers.
+
+### Logger Implementation
+
+To enhance the logging capabilities and avoid the excessive use of `console.log`, we have integrated the `winston` logger library. The `winston` library provides a flexible and extensible logging system, which allows us to log messages with different levels of severity and output them to various transports, such as console and files. This helps in better monitoring and debugging of the application.
+
 
 ## Prerequisites
 
